@@ -1,0 +1,57 @@
+.header{
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+}
+
+.header > .left{
+
+}
+
+.header > .right{
+
+}
+
+.header > .left > a{
+        text-decoration: none;
+    }
+
+.header > .right > a{
+        text-decoration: none;
+    }
+
+.hero{
+
+    }
+
+.hero > .top{
+
+    }
+
+.hero > .top > .title{
+        
+    }
+
+.hero > .top > .text{
+        
+    }
+
+.hero > .top > .button{
+        
+    }
+
+.hero > .top > .button > button{
+        
+    }
+
+.hero > .bottom{
+        
+    }
+
+.hero > .bottom > .left{
+        
+    }
+
+.hero > .bottom > .right{
+        
+    }
