@@ -15,7 +15,7 @@
         </div>
         <div class="right">
             <a href="">Login</a>
-            <a href="">Create Race</a>
+            <a href="./createRace.php">Create Race</a>
         </div>
     </div>
     <div class="hero">
@@ -25,7 +25,7 @@
                 Create your account, design your
                 form, and grow your race.
             </div>
-            <div class="button"><button>Create a Race</button></div>
+            <div class="button"><button onclick="location.href='createRace.php';">Create a Race</button></div>
         </div>
         <div class="bottom">
             <div class="left">Krispy Kreme Challenge</div>
