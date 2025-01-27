@@ -15,7 +15,7 @@
         </div>
         <div class="right">
             <a href="">Login</a>
-            <a href="./createAccount.php">Create account</a>
+            <a href="./createAccount.php">Create Account</a>
         </div>
     </div>
     <div class="hero">

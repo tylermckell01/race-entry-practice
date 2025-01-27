@@ -26,3 +26,8 @@ body{
 .header > .right > a{
     text-decoration: none;
     }
+
+h2{
+    width: 30%;
+    /* align-self: center; */
+}
