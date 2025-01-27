@@ -14,8 +14,8 @@
             <a href="/index.php">Directors</a>
         </div>
         <div class="right">
-            <a href="">login</a>
-            <a href="">create race</a>
+            <a href="">Login</a>
+            <a href="">Create Race</a>
         </div>
     </div>
     <div class="hero">
