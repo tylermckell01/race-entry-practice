@@ -24,7 +24,7 @@
         <input type="text" id="firstName" name="firstName" placeholder="Enter your first name" required><br><br>
 
         <label for="lastName">Last Name:</label>
-        <input type="lastName" id="lastName" name="lastName" placeholder="Enter your last name" required><br><br>
+        <input type="text" id="lastName" name="lastName" placeholder="Enter your last name" required><br><br>
 
         <label for="orgName">Organization Name:</label>
         <input type="text" id="orgName" name="orgName" placeholder="Enter your org name" required><br><br>
@@ -33,48 +33,56 @@
         <input type="text" id="phone" name="phone" placeholder="Enter your phone #" required><br><br>
 
         <label for="email">Email:</label>
-        <input type="text" id="email" name="email" placeholder="Enter your email" required><br><br>
+        <input type="email" id="email" name="email" placeholder="Enter your email" required><br><br>
 
         <label for="password">Password:</label>
-        <input type="text" id="password" name="password" placeholder="Enter your password" required><br><br>
+        <input type="password" id="password" name="password" placeholder="Enter your password" required><br><br>
 
         <label for="accountType">Account Type:</label>
         <input type="text" id="accountType" name="accountType" placeholder="Enter your account type" required><br><br>
 
         <button type="submit">Create Account</button>
     </form>
-</body>
 
 <?php
+include 'db.php';
 
-    function createAccount($firstName, $lastName, $orgName, $phone, $email, $password, $accountType) {
-        echo "<p>createAccount function run</p>";
+function createAccount($conn, $firstName, $lastName, $orgName, $phone, $email, $password, $accountType) {
+    $hashedPassword = password_hash($password, PASSWORD_BCRYPT); 
+
+    $sql = "INSERT INTO users (first_name, last_name, org_name, phone, email, password, account_type) 
+            VALUES (?, ?, ?, ?, ?, ?, ?)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("sssssss", $firstName, $lastName, $orgName, $phone, $email, $hashedPassword, $accountType);
+
+    if ($stmt->execute()) {
+        echo "<p>Account created successfully!</p>";
+    } else {
+        error_log("Database Error: " . $stmt->error); 
+        echo "<p>Something went wrong. Please try again later.</p>";
+    }
+    $stmt->close();
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $firstName = filter_input(INPUT_POST, "firstName", FILTER_SANITIZE_SPECIAL_CHARS);
+    $lastName = filter_input(INPUT_POST, "lastName", FILTER_SANITIZE_SPECIAL_CHARS);
+    $orgName = filter_input(INPUT_POST, "orgName", FILTER_SANITIZE_SPECIAL_CHARS);
+    $phone = filter_input(INPUT_POST, "phone", FILTER_SANITIZE_SPECIAL_CHARS);
+    $email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_EMAIL);
+    $password = filter_input(INPUT_POST, "password", FILTER_SANITIZE_SPECIAL_CHARS);
+    $accountType = filter_input(INPUT_POST, "accountType", FILTER_SANITIZE_SPECIAL_CHARS);
+
+    $errors = false;
+    if (empty($firstName) || empty($lastName) || empty($email) || empty($password)) {
+        echo "<p>All fields are required!</p>";
+        $errors = true;
     }
 
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        // grab data
-        $firstName = filter_input(INPUT_POST, "firstName", FILTER_SANITIZE_STRING);
-        $lastName = filter_input(INPUT_POST, "lastName", FILTER_SANITIZE_STRING);
-        $orgName = filter_input(INPUT_POST, "orgName", FILTER_SANITIZE_STRING);
-        $phone = filter_input(INPUT_POST, "phone", FILTER_SANITIZE_STRING);
-        $email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_STRING);
-        $password = filter_input(INPUT_POST, "password", FILTER_SANITIZE_STRING);
-        $accountType = filter_input(INPUT_POST, "accountType", FILTER_SANITIZE_STRING);
-
-        debug_to_console($num01);
-        
-        // error handlers
-        $errors = false;
-        if (empty($firstName) || empty($lastName) || empty($orgName) || empty($phone) || empty($email) || empty($password) || empty($accountType)) {
-            echo "<p>Fill in all fields</p>";
-            $errors = true;
-        }
-        
-        //insert data if no errors
-        if (!$errors) {
-            createAccount($firstName, $lastName, $orgName, $phone, $email, $password, $accountType);
-        }
-    };
-
+    if (!$errors) {
+        createAccount($conn, $firstName, $lastName, $orgName, $phone, $email, $password, $accountType);
+    }
+}
 ?>
+</body>
 </html>
